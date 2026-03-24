@@ -1,0 +1,87 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  font-family: "Trebuchet MS", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  color: #0f172a;
+  --page-bg:
+    radial-gradient(circle at top left, rgba(37, 99, 235, 0.16), transparent 26%),
+    radial-gradient(circle at bottom right, rgba(14, 165, 233, 0.12), transparent 18%),
+    linear-gradient(135deg, #f8fafc 0%, #eef2ff 42%, #f8fafc 100%);
+  --panel-bg: rgba(255, 255, 255, 0.84);
+  --panel-border: rgba(148, 163, 184, 0.20);
+  --panel-shadow: 0 24px 64px rgba(15, 23, 42, 0.08);
+  --hero-outline: rgba(37, 99, 235, 0.14);
+  --soft-text: #64748b;
+  --strong-text: #0f172a;
+  --accent: #2563eb;
+  --accent-soft: rgba(37, 99, 235, 0.10);
+  --accent-contrast: #dbeafe;
+  --soft-surface: rgba(248, 250, 252, 0.9);
+}
+
+html[data-color-scheme="dark"] {
+  color: #e6edf7;
+  --page-bg:
+    radial-gradient(circle at top left, rgba(96, 165, 250, 0.18), transparent 26%),
+    radial-gradient(circle at bottom right, rgba(56, 189, 248, 0.10), transparent 18%),
+    linear-gradient(135deg, #0b1020 0%, #111827 48%, #172033 100%);
+  --panel-bg: rgba(17, 24, 39, 0.76);
+  --panel-border: rgba(148, 163, 184, 0.14);
+  --panel-shadow: 0 24px 64px rgba(2, 6, 23, 0.42);
+  --hero-outline: rgba(96, 165, 250, 0.16);
+  --soft-text: #94a3b8;
+  --strong-text: #e6edf7;
+  --accent: #93c5fd;
+  --accent-soft: rgba(96, 165, 250, 0.12);
+  --accent-contrast: rgba(147, 197, 253, 0.18);
+  --soft-surface: rgba(30, 41, 59, 0.9);
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  color: var(--strong-text);
+  background: var(--page-bg);
+  background-attachment: fixed;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.glass-panel {
+  background: var(--panel-bg);
+  border: 1px solid var(--panel-border);
+  box-shadow: var(--panel-shadow);
+  backdrop-filter: blur(18px);
+}
+
+.surface-card {
+  background: linear-gradient(180deg, color-mix(in srgb, var(--panel-bg) 94%, white 6%), var(--panel-bg));
+  border: 1px solid var(--panel-border);
+  box-shadow: var(--panel-shadow);
+  backdrop-filter: blur(18px);
+}
+
+.hero-frame {
+  border: 1px solid var(--hero-outline);
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--panel-bg) 86%, transparent 14%), var(--panel-bg)),
+    radial-gradient(circle at top right, var(--accent-soft), transparent 35%);
+  box-shadow: var(--panel-shadow);
+  backdrop-filter: blur(20px);
+}
+
+.section-label {
+  color: var(--accent);
+  letter-spacing: 0.18em;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
