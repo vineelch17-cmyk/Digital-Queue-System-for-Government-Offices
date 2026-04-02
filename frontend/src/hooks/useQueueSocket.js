@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Client } from "@stomp/stompjs";
 import SockJS from "sockjs-client";
+import { websocketUrl } from "../utils/runtimeConfig";
 
 export function useQueueSocket(queueId, tokenId, userId) {
   const [queueUpdate, setQueueUpdate] = useState(null);
@@ -9,7 +10,7 @@ export function useQueueSocket(queueId, tokenId, userId) {
 
   useEffect(() => {
     const client = new Client({
-      webSocketFactory: () => new SockJS("http://localhost:8080/ws"),
+      webSocketFactory: () => new SockJS(websocketUrl),
       reconnectDelay: 5000
     });
 

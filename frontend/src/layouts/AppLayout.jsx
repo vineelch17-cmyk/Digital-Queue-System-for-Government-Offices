@@ -38,7 +38,7 @@ const roleNav = {
 };
 
 export default function AppLayout() {
-  const { user, logout } = useAuth();
+  const { user, logout, ready } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const { i18n, t } = useTranslation();
@@ -47,7 +47,7 @@ export default function AppLayout() {
   const { data: unread } = useQuery({
     queryKey: ["layout-notification-unread"],
     queryFn: notificationService.unreadCount,
-    enabled: Boolean(user && storage.hasToken()),
+    enabled: Boolean(ready && user && storage.hasToken()),
     refetchInterval: 15000,
     retry: false
   });

@@ -1,0 +1,55 @@
+services:
+  - type: web
+    name: digital-queue-backend
+    runtime: java
+    plan: free
+    rootDir: backend
+    buildCommand: mvn clean package -DskipTests
+    startCommand: java -jar target/digital-queue-management-system-1.0.0.jar --spring.profiles.active=render
+    healthCheckPath: /api/public/health
+    envVars:
+      - key: PGHOST
+        fromDatabase:
+          name: digital-queue-postgres
+          property: host
+      - key: PGPORT
+        fromDatabase:
+          name: digital-queue-postgres
+          property: port
+      - key: PGDATABASE
+        fromDatabase:
+          name: digital-queue-postgres
+          property: database
+      - key: PGUSER
+        fromDatabase:
+          name: digital-queue-postgres
+          property: user
+      - key: PGPASSWORD
+        fromDatabase:
+          name: digital-queue-postgres
+          property: password
+      - key: APP_CORS_ALLOWED_ORIGIN_PATTERNS
+        value: https://*.onrender.com
+
+  - type: web
+    name: digital-queue-frontend
+    runtime: static
+    plan: free
+    rootDir: frontend
+    buildCommand: npm ci && npm run build
+    staticPublishPath: dist
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
+    envVars:
+      - key: VITE_API_BASE_URL
+        value: https://digital-queue-backend.onrender.com
+
+databases:
+  - name: digital-queue-postgres
+    databaseName: digital_queue_render
+    user: digital_queue_user
+    plan: free
+    postgresMajorVersion: "16"
+    ipAllowList: []

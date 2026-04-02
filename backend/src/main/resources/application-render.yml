@@ -1,0 +1,23 @@
+spring:
+  config:
+    activate:
+      on-profile: render
+  datasource:
+    url: jdbc:postgresql://${PGHOST}:${PGPORT}/${PGDATABASE}
+    username: ${PGUSER}
+    password: ${PGPASSWORD}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: false
+  sql:
+    init:
+      mode: never
+
+app:
+  cors:
+    allowed-origin-patterns: https://*.onrender.com

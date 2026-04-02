@@ -1,8 +1,9 @@
 import axios from "axios";
 import { storage } from "../utils/storage";
+import { apiBaseUrl } from "../utils/runtimeConfig";
 
 const api = axios.create({
-  baseURL: "http://localhost:8080"
+  baseURL: apiBaseUrl
 });
 
 api.interceptors.request.use((config) => {

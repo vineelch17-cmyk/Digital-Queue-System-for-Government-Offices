@@ -7,17 +7,15 @@ const AuthContext = createContext(null);
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(() => (storage.hasToken() ? storage.getUser() : null));
   const [loading, setLoading] = useState(false);
+  const [ready, setReady] = useState(false);
 
   useEffect(() => {
     if (!storage.hasToken()) {
-      if (user) {
-        storage.clear();
-        setUser(null);
-      }
+      storage.clear();
+      setUser(null);
+      setReady(true);
       return;
     }
-
-    if (user) return;
 
     authService.profile()
       .then((profile) => {
@@ -27,8 +25,9 @@ export function AuthProvider({ children }) {
       .catch(() => {
         storage.clear();
         setUser(null);
-      });
-  }, [user]);
+      })
+      .finally(() => setReady(true));
+  }, []);
 
   useEffect(() => {
     const handleUnauthorized = () => {
@@ -47,6 +46,7 @@ export function AuthProvider({ children }) {
       storage.setToken(data.token);
       storage.setUser(data);
       setUser(data);
+      setReady(true);
       return data;
     } finally {
       setLoading(false);
@@ -60,6 +60,7 @@ export function AuthProvider({ children }) {
       storage.setToken(data.token);
       storage.setUser(data);
       setUser(data);
+      setReady(true);
       return data;
     } finally {
       setLoading(false);
@@ -71,7 +72,7 @@ export function AuthProvider({ children }) {
     setUser(null);
   };
 
-  return <AuthContext.Provider value={{ user, login, register, logout, loading }}>{children}</AuthContext.Provider>;
+  return <AuthContext.Provider value={{ user, login, register, logout, loading, ready }}>{children}</AuthContext.Provider>;
 }
 
 export function useAuth() {

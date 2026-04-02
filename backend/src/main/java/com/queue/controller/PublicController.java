@@ -49,4 +49,9 @@ public class PublicController {
     public Object displayBoard(@RequestParam(required = false) Long officeId) {
         return queueService.getDisplayBoard(officeId);
     }
+
+    @GetMapping("/health")
+    public Object health() {
+        return Map.of("status", "UP");
+    }
 }

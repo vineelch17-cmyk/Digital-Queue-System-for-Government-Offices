@@ -4,9 +4,9 @@ Enterprise full-stack project for managing government office queues digitally in
 
 ## Stack
 
-- Backend: Java 17, Spring Boot 3, Spring Security JWT, Spring Data JPA, Hibernate, MySQL, WebSocket, Swagger, Maven
+- Backend: Java 17, Spring Boot 3, Spring Security JWT, Spring Data JPA, Hibernate, MySQL for local development, PostgreSQL for Render deployment, WebSocket, Swagger, Maven
 - Frontend: React with Vite, Tailwind CSS, Material UI, React Router, Axios, React Query, STOMP WebSocket client, Chart.js
-- Deployment: Docker and Docker Compose
+- Deployment: Docker and Docker Compose locally, Render Blueprint for cloud deployment
 
 ## Project Structure
 
@@ -51,6 +51,12 @@ frontend/
 - Staff: `staff@govqueue.com` / `Staff@123`
 - Citizen: `citizen@govqueue.com` / `Citizen@123`
 
+## Database Strategy
+
+- Local development uses MySQL from [backend/src/main/resources/application.yml](/c:/Users/p lakshmi swetha/Digital Queue System for Government Offices/backend/src/main/resources/application.yml).
+- Render deployment uses PostgreSQL from [backend/src/main/resources/application-render.yml](/c:/Users/p lakshmi swetha/Digital Queue System for Government Offices/backend/src/main/resources/application-render.yml).
+- The two do not collide because Render runs with `spring.profiles.active=render`, while local development continues using the default MySQL configuration.
+
 ## Run Locally
 
 ### Backend
@@ -70,7 +76,8 @@ mvn spring-boot:run
 ### Frontend
 
 1. Install Node.js 20+.
-2. Start the UI:
+2. Copy [frontend/.env.example](/c:/Users/p lakshmi swetha/Digital Queue System for Government Offices/frontend/.env.example) to `.env` if you want to override the API URL.
+3. Start the UI:
 
 ```bash
 cd frontend
@@ -78,7 +85,7 @@ npm install
 npm run dev
 ```
 
-3. Open `http://localhost:5173`
+4. Open `http://localhost:5173`
 
 ## Run With Docker
 
@@ -91,6 +98,36 @@ Services:
 - Frontend: `http://localhost:5173`
 - Backend: `http://localhost:8080`
 - MySQL: `localhost:3306`
+
+## Deploy To Render
+
+This repository now includes [render.yaml](/c:/Users/p lakshmi swetha/Digital Queue System for Government Offices/render.yaml) for a two-service Render deployment:
+
+- `digital-queue-backend`: Spring Boot API on Render Web Service
+- `digital-queue-frontend`: Vite static frontend on Render Static Site
+- `digital-queue-postgres`: Render PostgreSQL database
+
+### Render-specific changes
+
+- PostgreSQL driver added in [backend/pom.xml](/c:/Users/p lakshmi swetha/Digital Queue System for Government Offices/backend/pom.xml)
+- Render Spring profile in [backend/src/main/resources/application-render.yml](/c:/Users/p lakshmi swetha/Digital Queue System for Government Offices/backend/src/main/resources/application-render.yml)
+- API base URL and WebSocket URL are now environment-driven in [frontend/src/services/api.js](/c:/Users/p lakshmi swetha/Digital Queue System for Government Offices/frontend/src/services/api.js) and [frontend/src/hooks/useQueueSocket.js](/c:/Users/p lakshmi swetha/Digital Queue System for Government Offices/frontend/src/hooks/useQueueSocket.js)
+- Public health endpoint added at `/api/public/health`
+
+### Render deployment steps
+
+1. Commit and push the current repository, including `render.yaml`.
+2. Open this Blueprint link in Render:
+   `https://dashboard.render.com/blueprint/new?repo=https://github.com/vineelch17-cmyk/Digital-Queue-System-for-Government-Offices`
+3. Review the three resources Render will create.
+4. Keep the backend service on the `render` Spring profile.
+5. If Render asks you to confirm frontend env values, keep `VITE_API_BASE_URL` pointed at your backend Render URL.
+
+### Notes for Render
+
+- The backend health check path is `/api/public/health`.
+- CORS is profile-based: localhost for local development, `https://*.onrender.com` for Render.
+- The frontend static build reads `VITE_API_BASE_URL` at build time, so if you rename the backend service in Render, update that variable accordingly.
 
 ## Core API Endpoints
 
@@ -119,4 +156,3 @@ Services:
 - `backend/src/main/java/com/queue/config/DataInitializer.java` seeds demo records.
 - Email and SMS methods are scaffolded with integration hooks for production gateways.
 - Staff management UI is present, but full CRUD staff administration should be backed by dedicated admin user APIs if you want complete HR-style provisioning.
-"# Digital-Queue-System-for-Government-Offices" 
