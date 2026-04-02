@@ -3,9 +3,9 @@ services:
     name: digital-queue-backend
     runtime: docker
     plan: free
-    rootDir: .
+    rootDir: backend
     dockerContext: .
-    dockerfilePath: ./backend/Dockerfile
+    dockerfilePath: ./Dockerfile
     healthCheckPath: /api/public/health
     envVars:
       - key: SPRING_PROFILES_ACTIVE
